@@ -1,9 +1,11 @@
 require './lib/vendor'
+require './lib/item'
 
 RSpec.describe Vendor do
   before(:each) do
     @vendor = Vendor.new("Rocky Mountain Fresh")
-    
+    @item1 = Item.new(name: 'Peach', price: "$0.75")
+    @item2 = Item.new(name: 'Tomato', price: "$0.50")
   end
 
   it "exists" do
@@ -28,5 +30,12 @@ RSpec.describe Vendor do
 
     @vendor.stock("item1", 25)
     expect(@vendor.check_stock("item1")).to eq(25)
+  end
+
+  it "calculates potential revenue based on the inventory" do
+    @vendor.stock(@item1, 35)
+    @vendor.stock(@item2, 7)
+
+    expected_revenue = (@item1.price.delete('$').to_f * 35) + (@item2.price.delete('$').to_f * 7)
   end
 end

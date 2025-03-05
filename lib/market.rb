@@ -20,24 +20,41 @@ class Market
   end
 
   def vendors_that_sell(item)
-    vendors_that_sell = []
-    @vendors.each do |vendor|
-      # Check if the vendor's inventory includes the item
+    vendors_that_sell = []  # create an empty array
+    @vendors.each do |vendor|  # Iterate through each vendor in the vendors array
+      # Check if the vendor has stock for the specified item.
       if vendor.check_stock(item) > 0
-        vendors_that_sell << vendor
+        vendors_that_sell << vendor  # If the vendor has the item in stock, add the vendor to the vendors_that_sell
       end
     end
-    vendors_that_sell
+    vendors_that_sell  # Returns the array
   end
 
-  # def potential_revenue
-  #   total_revenue = 0
-  #   @vendors.each do |vendor|
-  #     vendor.inventory.each do |item, quantity|
-  #       total_revenue += item.price.to_f * quantity
-  #     end
-  #   end
-  #   total_revenue
-  # end
+  def total_inventory
+    total_inventory = {}  # an empty hash
+    @vendors.each do |vendor|  # go through each vendor in the market.
+      vendor.inventory.each do |item, quantity|  #  go through each item and quanitity in inventory
+        if total_inventory[item]  # Check if the item already exists in the total_inventory hash.
+          total_inventory[item][:quantity] += quantity  # If it exists, add the quantity to the total.
+          total_inventory[item][:vendors] << vendor  # Add the current vendor to the list of vendors selling the item.
+        else
+          total_inventory[item] = { quantity: quantity, vendors: [vendor] }  # If the item doesn’t exist, create a new entry.
+        end
+      end
+    end
+    total_inventory  # Return the hash.
+  end
+
+  def sorted_item_list
+    items = []
+
+    @vendors.each do |vendor|
+      vendor.inventory.each_key do |item|
+        items << item.name
+      end
+    end
+
+    items.uniq.sort
+  end
 
 end

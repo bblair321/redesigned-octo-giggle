@@ -2,18 +2,31 @@ require './lib/vendor'
 
 RSpec.describe Vendor do
   before(:each) do
-    @vendor = Vendor.new
+    @vendor = Vendor.new("Rocky Mountain Fresh")
+    
   end
 
   it "exists" do
     expect(@vendor).to be_a(Vendor)
   end
 
-  xit "has attributes" do
-    expect(@artist.id).to eq("2")
-    expect(@artist.name).to eq("Ansel Adams")
-    expect(@artist.born).to eq("1902")
-    expect(@artist.died).to eq("1902")
-    expect(@artist.country).to eq("United States")
+  it "has name" do
+    expect(@vendor.name).to eq("Rocky Mountain Fresh")
+  end
+
+  it "has an inventory" do
+    expect(@vendor.inventory).to eq({})
+  end
+
+  it "checks stock" do
+    expect(@vendor.check_stock("item")).to eq(0)
+  end
+
+  it "can stock items in inventory" do
+    @vendor.stock("item", 30)
+    expect(@vendor.check_stock("item")).to eq(30)
+
+    @vendor.stock("item1", 25)
+    expect(@vendor.check_stock("item1")).to eq(25)
   end
 end
